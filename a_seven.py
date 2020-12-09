@@ -41,7 +41,7 @@ def run(command: str):
     except IndexError:
         raise CustomError("Target location not mentioned")
     if command == "-create_archive":
-        run_create_archive(target_archive, sys.argv[3:])
+        run_create_archive(target_archive, *sys.argv[3:])
     if command == "-full_unpack":
         run_full_unpack(target_archive, target_folder)
     try:
@@ -49,7 +49,7 @@ def run(command: str):
     except IndexError:
         raise CustomError("Target files not mentioned")
     if command == "-unpack":
-        run_unpack(target_archive, target_folder, target_files)
+        run_unpack(target_archive, target_folder, *target_files)
     raise CustomError("Invalid first argument. Run `python a_seven.py --help` for help")
 
 

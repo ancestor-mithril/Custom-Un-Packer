@@ -32,7 +32,7 @@ def run_help():
     exit(0)
 
 
-def run_create_archive(target_archive: str, *target_objects: List[str]):
+def run_create_archive(target_archive: str, *target_objects: str):
     """
     adds each target_object to archive, if target_object is file, otherwise adds all content of target_object to archive
     and creates said archive
@@ -42,7 +42,7 @@ def run_create_archive(target_archive: str, *target_objects: List[str]):
     :param target_objects: a list of paths to valid files or folders; should not be empty
     :return: void
     """
-    exit(0)
+    pass
 
 
 def run_list_content(target_archive: str):
@@ -53,7 +53,7 @@ def run_list_content(target_archive: str):
     :param target_archive: the path to an already created archive
     :return: void
     """
-    exit(0)
+    pass
 
 
 def run_full_unpack(target_archive: str, target_folder: str):
@@ -65,10 +65,10 @@ def run_full_unpack(target_archive: str, target_folder: str):
     :param target_folder: the path to the unpack location directory; should not already exist
     :return: void
     """
-    exit(0)
+    pass
 
 
-def run_unpack(target_archive: str, target_folder: str, *target_files: List[str]):
+def run_unpack(target_archive: str, target_folder: str, *target_files: str):
     """
     creates target_folder where it unpacks listed target_files from target_archive
     then exits program
@@ -78,4 +78,4 @@ def run_unpack(target_archive: str, target_folder: str, *target_files: List[str]
     :param target_files: a list of files inside target_archive
     :return: void
     """
-    exit(0)
+    pass
