@@ -12,8 +12,8 @@ de compresie)
 
 
 import sys
-import os
-from utils import error_print, color_print, CustomError
+from utils import error_print, CustomError
+from functions import run_help, run_list_content, run_create_archive, run_full_unpack, run_unpack
 
 
 def run(command: str):
@@ -21,13 +21,45 @@ def run(command: str):
     the script arguments match the following structure:
     a_seven.py command [target_archive [ [target_folder] [file_1 [file_2...]] ] ]
 
+    run processes sys.argv arguments and calls required functions; raises exceptions if arguments do not match the
+    above mentioned format or command is not recognized
+
     :param command: first argument of `a_seven`; should be "--help", "-create_archive", "-list_content", "-full_unpack",
                     or "-unpack"
     :return: void
     """
+    if command == "--help":
+        run_help()
+    try:
+        target_archive = sys.argv[2]
+    except IndexError:
+        raise CustomError("Target archive not mentioned")
+    if command == "-list_content":
+        run_list_content(target_archive)
+    try:
+        target_folder = sys.argv[3]
+    except IndexError:
+        raise CustomError("Target location not mentioned")
+    if command == "-create_archive":
+        run_create_archive(target_archive, sys.argv[3:])
+    if command == "-full_unpack":
+        run_full_unpack(target_archive, target_folder)
+    try:
+        target_files = sys.argv[4:]
+    except IndexError:
+        raise CustomError("Target files not mentioned")
+    if command == "-unpack":
+        run_unpack(target_archive, target_folder, target_files)
+    raise CustomError("Invalid first argument. Run `python a_seven.py --help` for help")
 
 
 if __name__ == "__main__":
+    sys.argv[1:] = ["--help"]
+    # sys.argv[1:] = ["-list_content", "./test/test.archive"]
+    # sys.argv[1:] = ["-create_archive", "./test/test.archive", "./test/test_folder"]
+    # sys.argv[1:] = ["-create_archive", "./test/test2.archive", "./test/test_folder/file1", "./test/test_folder/file2"]
+    # sys.argv[1:] = ["-full_unpack", "./test/test.archive", "./test/test_unpack_1"]
+    # sys.argv[1:] = ["-unpack", "./test/test.archive", "./test/test_unpack_1", "file1"]
     if len(sys.argv) < 2:
         error_print("Invalid syntax. Run `python a_seven.py --help` for help")
     try:
