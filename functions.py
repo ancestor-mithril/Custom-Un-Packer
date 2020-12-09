@@ -18,6 +18,7 @@ python a_seven.py -unpack target_archive target_folder target_files
 """
 from typing import List
 
+from archive import get_archive_content
 from utils import color_print
 
 
@@ -53,6 +54,7 @@ def run_list_content(target_archive: str):
     :param target_archive: the path to an already created archive
     :return: void
     """
+    print("\n".join(get_archive_content(target_archive)))
     pass
 
 
