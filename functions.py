@@ -19,7 +19,8 @@ python a_seven.py -unpack target_archive target_folder target_files
 import errno
 from typing import List
 import os
-from archive import get_archive_content, get_input_files_for_archive, append_file_to_archive, unpack_file
+from archive import get_archive_content, get_input_files_for_archive, append_file_to_archive, unpack_file, \
+    prepare_archive_unpacking, empty_read_archive
 from utils import color_print, CustomError
 
 
@@ -88,14 +89,7 @@ def run_full_unpack(target_archive: str, target_folder: str):
     :param target_folder: the path to the unpack location directory; should not already exist
     :return: void
     """
-    assert os.path.isfile(target_archive) and target_archive.split(".")[-1] == "archive", \
-        "The file given as parameter is not a valid archive"
-    try:
-        os.makedirs(target_folder)
-    except OSError as e:
-        if e.errno == errno.EEXIST:
-            raise CustomError("The directory given as parameter already exists")
-        raise
+    prepare_archive_unpacking(target_archive, target_folder)
     metadata_length, files = get_archive_content(target_archive)
     with open(target_archive, "rb") as fp:
         fp.read(metadata_length)
@@ -114,4 +108,17 @@ def run_unpack(target_archive: str, target_folder: str, *target_files: str):
     :param target_files: a list of files inside target_archive
     :return: void
     """
+    prepare_archive_unpacking(target_archive, target_folder)
+    metadata_length, files = get_archive_content(target_archive)
+    possible_files = [x for x, y in files]
+    for i in target_files:
+        if i not in possible_files:
+            raise CustomError(f"{i} nu se afla in urmatoarele fisiere:{', '.join(possible_files)}]")
+    with open(target_archive, "rb") as fp:
+        fp.read(metadata_length)
+        for file, size in files:
+            if file in target_files:
+                unpack_file(file=target_folder + "/" + file, size=int(size), fp=fp)
+            else:
+                empty_read_archive(size=int(size), fp=fp)
     pass

@@ -99,7 +99,7 @@ class CustomUnPackerTester(unittest.TestCase):
         target_archive = "./test/test.archive"
         create_test_folders("test_folder")
         correct_answer = [
-            "/test_folder/file1", "/test_folder/file2", "/test_folder/file3", "/test_folder/inside_dir/file1"
+            "\\file1", "\\file2", "\\file3", "\\inside_dir\\file4"
         ]
         list_archive_content = []
         no_error = True
@@ -120,15 +120,14 @@ class CustomUnPackerTester(unittest.TestCase):
         """
         target_archive = "./test/test.archive"
         create_test_folders("test_folder")
-        shutil.rmtree("./test")
-        target_files = ["/file1", "/inside_dir/file4"]
+        target_files = ["\\file1", "\\inside_dir\\file4"]
         unpacked_files = []
         no_error = True
         ok = True
         try:
             run_create_archive(target_archive, "./test/test_folder")
-            run_unpack(target_archive, "archived_folder", *target_files)
-            unpacked_files = get_local_path_of_files_from_directory("archived_folder")
+            run_unpack(target_archive, "./test/archived_folder", *target_files)
+            unpacked_files = get_local_path_of_files_from_directory("./test/archived_folder")
         except Exception as e:
             error_print(e)
             no_error = False

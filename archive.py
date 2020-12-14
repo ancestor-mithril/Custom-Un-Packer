@@ -1,3 +1,4 @@
+import errno
 import re
 from typing import List, Tuple, BinaryIO
 import os
@@ -113,10 +114,41 @@ def unpack_file(file: str, size: int, fp: BinaryIO, chunk_size: int = 1024):
     :return: void
     """
     os.makedirs(os.path.dirname(file), exist_ok=True)
-    print(file, size)
     with open(file, "wb") as fp2:
         while size > chunk_size:
             fp2.write(fp.read(chunk_size))
             size -= chunk_size
         if size > 0:
             fp2.write(fp.read(size))
+
+
+def prepare_archive_unpacking(target_archive: str, target_folder: str):
+    """
+
+    :param target_archive: the path to an already created archive
+    :param target_folder: the path to the unpack location directory; should not already exist
+    :return: void
+    """
+    assert os.path.isfile(target_archive) and target_archive.split(".")[-1] == "archive", \
+        "The file given as parameter is not a valid archive"
+    try:
+        os.makedirs(target_folder)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            raise CustomError("The directory given as parameter already exists")
+        raise
+
+
+def empty_read_archive(size: int, fp: BinaryIO, chunk_size: int = 1024):
+    """
+
+    :param size: the size of empty read
+    :param fp: archive file pointer
+    :param chunk_size: the chunk size to be read
+    :return: void
+    """
+    while size > chunk_size:
+        fp.read(chunk_size)
+        size -= chunk_size
+    if size > 0:
+        fp.read(size)
