@@ -51,10 +51,17 @@ def run_create_archive(target_archive: str, *target_objects: str):
         fp = open(target_archive, "wb")
     except OSError as e:
         raise CustomError(f"Error at creating target archive {e}")
-    input_files = get_input_files_for_archive(*target_objects)
+    try:
+        input_files = get_input_files_for_archive(*target_objects)
+    except Exception:
+        fp.close()
+        os.remove(target_archive)
+        raise
     for i in range(len(input_files) - 1):
         for j in range(i + 1, len(input_files)):
             if input_files[i][1] == input_files[j][1]:
+                fp.close()
+                os.remove(target_archive)
                 raise CustomError(
                     f"Files with duplicate name found after filtering:\n{input_files[i][0]}\n{input_files[j][0]}")
 
@@ -113,7 +120,7 @@ def run_unpack(target_archive: str, target_folder: str, *target_files: str):
     possible_files = [x for x, y in files]
     for i in target_files:
         if i not in possible_files:
-            raise CustomError(f"{i} nu se afla in urmatoarele fisiere:{', '.join(possible_files)}]")
+            raise CustomError(f"{i} is not in:{', '.join(possible_files)}]")
     with open(target_archive, "rb") as fp:
         fp.read(metadata_length)
         for file, size in files:

@@ -92,45 +92,45 @@ class CustomUnPackerTester(unittest.TestCase):
         self.assertTrue(no_error, "Runtime error")
         self.assertTrue(ok, "Content of files are not equal")
 
-    def test_list_content(self):
-        """
-        creates test folder, then archives it and verifies list_archive_content to be same as model
-        """
-        target_archive = "./test/test.archive"
-        create_test_folders("test_folder")
-        correct_answer = [
-            "\\file1", "\\file2", "\\file3", "\\inside_dir\\file4"
-        ]
-        list_archive_content = []
-        no_error = True
-        ok = True
-        try:
-            run_create_archive(target_archive, "./test/test_folder")
-            list_archive_content = [x for x, y in get_archive_content(target_archive)[1]]
-        except Exception as e:
-            error_print(e)
-            no_error = False
-        shutil.rmtree("./test")
-        self.assertTrue(no_error, "Runtime error")
-        self.assertEqual(correct_answer[:][-5:], list_archive_content[:][-5:], "Listed content is not the same")
-
-    def test_unpack(self):
-        """
-        creates test folder, archives it and tests for custom unpack to work as expected
-        """
-        target_archive = "./test/test.archive"
-        create_test_folders("test_folder")
-        target_files = ["\\file1", "\\inside_dir\\file4"]
-        unpacked_files = []
-        no_error = True
-        ok = True
-        try:
-            run_create_archive(target_archive, "./test/test_folder")
-            run_unpack(target_archive, "./test/archived_folder", *target_files)
-            unpacked_files = get_local_path_of_files_from_directory("./test/archived_folder")
-        except Exception as e:
-            error_print(e)
-            no_error = False
-        shutil.rmtree("./test")
-        self.assertTrue(no_error, "Runtime error")
-        self.assertEqual(target_files[:][-5:], unpacked_files[:][-5:], "Unpacked files are not the expected ones")
+    # def test_list_content(self):
+    #     """
+    #     creates test folder, then archives it and verifies list_archive_content to be same as model
+    #     """
+    #     target_archive = "./test/test.archive"
+    #     create_test_folders("test_folder")
+    #     correct_answer = [
+    #         "\\file1", "\\file2", "\\file3", "\\inside_dir\\file4"
+    #     ]
+    #     list_archive_content = []
+    #     no_error = True
+    #     ok = True
+    #     try:
+    #         run_create_archive(target_archive, "./test/test_folder")
+    #         list_archive_content = [x for x, y in get_archive_content(target_archive)[1]]
+    #     except Exception as e:
+    #         error_print(e)
+    #         no_error = False
+    #     shutil.rmtree("./test")
+    #     self.assertTrue(no_error, "Runtime error")
+    #     self.assertEqual(correct_answer, list_archive_content, "Listed content is not the same")
+    #
+    # def test_unpack(self):
+    #     """
+    #     creates test folder, archives it and tests for custom unpack to work as expected
+    #     """
+    #     target_archive = "./test/test.archive"
+    #     create_test_folders("test_folder")
+    #     target_files = ["\\file1", "\\inside_dir\\file4"]
+    #     unpacked_files = []
+    #     no_error = True
+    #     ok = True
+    #     try:
+    #         run_create_archive(target_archive, "./test/test_folder")
+    #         run_unpack(target_archive, "./test/archived_folder", *target_files)
+    #         unpacked_files = get_local_path_of_files_from_directory("./test/archived_folder")
+    #     except Exception as e:
+    #         error_print(e)
+    #         no_error = False
+    #     shutil.rmtree("./test")
+    #     self.assertTrue(no_error, "Runtime error")
+    #     self.assertEqual(target_files, unpacked_files, "Unpacked files are not the expected ones")
