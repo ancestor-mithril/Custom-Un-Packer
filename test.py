@@ -106,7 +106,7 @@ class CustomUnPackerTester(unittest.TestCase):
         ok = True
         try:
             run_create_archive(target_archive, "./test/test_folder")
-            list_archive_content = get_archive_content(target_archive)
+            list_archive_content = [x for x, y in get_archive_content(target_archive)[1]]
         except Exception as e:
             error_print(e)
             no_error = False
