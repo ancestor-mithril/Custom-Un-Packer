@@ -16,9 +16,10 @@ python a_seven.py -unpack target_archive target_folder target_files
                 => fails if any of `target_files` is not inside `target_archive`
                 => unpacks each one of `target_files` from `target_archive` into `target_folder`
 """
+import errno
 from typing import List
 import os
-from archive import get_archive_content, get_input_files_for_archive, append_file_to_archive
+from archive import get_archive_content, get_input_files_for_archive, append_file_to_archive, unpack_file
 from utils import color_print, CustomError
 
 
@@ -56,7 +57,7 @@ def run_create_archive(target_archive: str, *target_objects: str):
                 raise CustomError(
                     f"Files with duplicate name found after filtering:\n{input_files[i][0]}\n{input_files[j][0]}")
 
-    archive_metadata = f"""<?METADATA><?NO_FILES>{len(input_files)}</?NO_FILES><FILES>{"".join([
+    archive_metadata = f"""<?METADATA><?NO_FILES>{len(input_files)}</?NO_FILES><?FILES>{"".join([
         f"<?FILE><?NAME>{j}</?NAME><?SIZE>{os.path.getsize(i)}</?SIZE></?FILE>" for i, j in input_files
     ])}</?FILES></?METADATA>""".encode('utf-8')
     with fp:
@@ -74,7 +75,7 @@ def run_list_content(target_archive: str):
     :param target_archive: the path to an already created archive
     :return: void
     """
-    print("\n".join(get_archive_content(target_archive)))
+    print("\n".join(f"{i}: size: {j}" for i, j in get_archive_content(target_archive)[1]))
     pass
 
 
@@ -87,6 +88,20 @@ def run_full_unpack(target_archive: str, target_folder: str):
     :param target_folder: the path to the unpack location directory; should not already exist
     :return: void
     """
+    assert os.path.isfile(target_archive) and target_archive.split(".")[-1] == "archive", \
+        "The file given as parameter is not a valid archive"
+    try:
+        os.makedirs(target_folder)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            raise CustomError("The directory given as parameter already exists")
+        raise
+    metadata_length, files = get_archive_content(target_archive)
+    with open(target_archive, "rb") as fp:
+        fp.read(metadata_length)
+        for file, size in files:
+            unpack_file(file=target_folder + file, size=int(size), fp=fp)
+    print(files)
     pass
 
 

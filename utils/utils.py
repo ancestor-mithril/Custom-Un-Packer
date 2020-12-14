@@ -1,7 +1,5 @@
 from __future__ import print_function
 import os
-import re
-from re import Pattern
 import hashlib
 from typing import List
 from termcolor import colored, cprint
@@ -45,6 +43,8 @@ def are_files_equal(file_1: str, file_2: str, chunk_size: int = 1024) -> bool:
     if not (os.path.isfile(file_1) and os.path.isfile(file_2)):
         raise CustomError("Paths are not dirs")
     try:
+        if os.path.getsize(file_1) != os.path.getsize(file_2):
+            return False
         hash_1 = hashlib.sha1()
         hash_2 = hashlib.sha1()
         with open(file_1, 'rb') as fd_1:
@@ -104,6 +104,8 @@ def are_folders_equal(folder_1: str, folder_2: str) -> bool:
         raise CustomError("Paths are not dirs")
     files_1 = get_files_from_directory(folder_1)
     files_2 = get_files_from_directory(folder_2)
+    if len(files_1) != len(files_2):
+        return False
     for i, j in zip(files_1, files_2):
         if not are_files_equal(i, j):
             return False

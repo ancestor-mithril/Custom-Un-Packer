@@ -1,7 +1,6 @@
 import errno
 import unittest
 import os
-
 from archive import get_archive_content
 from functions import run_create_archive, run_full_unpack, run_unpack
 from utils import open_2, are_folders_equal, get_files_from_directory, are_files_equal, error_print
@@ -56,6 +55,7 @@ class CustomUnPackerTester(unittest.TestCase):
         ok = True
         try:
             run_create_archive(target_archive, "./test/test_folder")
+            # run_create_archive(target_archive, "./utils.rar")
             run_full_unpack(target_archive, "./test/archived_folder")
             ok = are_folders_equal("./test/archived_folder", "./test/test_folder")
         except Exception as e:
