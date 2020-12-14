@@ -43,7 +43,7 @@ def are_files_equal(file_1: str, file_2: str, chunk_size: int = 1024) -> bool:
     :return: True, if files are equal, False otherwise
     """
     if not (os.path.isfile(file_1) and os.path.isfile(file_2)):
-        raise CustomError("paths are not dirs")
+        raise CustomError("Paths are not dirs")
     try:
         hash_1 = hashlib.sha1()
         hash_2 = hashlib.sha1()
@@ -82,12 +82,12 @@ def get_local_path_of_files_from_directory(path_to_directory: str) -> List[str]:
     same as above function but returns relative paths only
 
     :param path_to_directory: path to a valid directory
-    :return: a list of relative paths of files inside target directory
+    :return: a list of relative paths of files inside target directory, relative towards directory
     """
     all_files = []
     for root, directories, files in os.walk(path_to_directory):
         all_files += [
-            os.path.join(root, file_name) for file_name in files if
+            os.path.join(root, file_name)[len(path_to_directory):] for file_name in files if
             os.path.isfile(os.path.join(root, file_name)) and os.access(os.path.join(root, file_name), os.R_OK)
         ]
     return all_files
@@ -101,7 +101,7 @@ def are_folders_equal(folder_1: str, folder_2: str) -> bool:
     :return: True, if folders are equal, false otherwise
     """
     if not (os.path.isdir(folder_1) and os.path.isdir(folder_2)):
-        raise CustomError("paths are not dirs")
+        raise CustomError("Paths are not dirs")
     files_1 = get_files_from_directory(folder_1)
     files_2 = get_files_from_directory(folder_2)
     for i, j in zip(files_1, files_2):

@@ -45,6 +45,10 @@ def create_test_folders(folder: str):
 
 class CustomUnPackerTester(unittest.TestCase):
     def test_create_archive_from_directory(self):
+        """
+        creates test folder, runs create_archive on it and full_unpack, then verifies equality of initial and unpacked
+        should runtime error occur, test fails
+        """
         target_archive = "./test/test.archive"
         create_test_folders("test_folder")
         # create_test_folders("archived_folder")
@@ -62,6 +66,10 @@ class CustomUnPackerTester(unittest.TestCase):
         shutil.rmtree("./test")
 
     def test_create_archive_from_files(self):
+        """
+        creates test folder, runs create_folder on some files, full unpack and verifies equality of used files
+        should runtime error occur, test fails
+        """
         target_archive = "./test/test.archive"
         create_test_folders("test_folder")
         # create_test_folders("archived_folder")
@@ -85,6 +93,9 @@ class CustomUnPackerTester(unittest.TestCase):
         shutil.rmtree("./test")
 
     def test_list_content(self):
+        """
+        creates test folder, then archives it and verifies list_archive_content to be same as model
+        """
         target_archive = "./test/test.archive"
         create_test_folders("test_folder")
         correct_answer = [
@@ -104,6 +115,9 @@ class CustomUnPackerTester(unittest.TestCase):
         shutil.rmtree("./test")
 
     def test_unpack(self):
+        """
+        creates test folder, archives it and tests for custom unpack to work as expected
+        """
         target_archive = "./test/test.archive"
         create_test_folders("test_folder")
         shutil.rmtree("./test")

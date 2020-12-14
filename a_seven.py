@@ -30,26 +30,31 @@ def run(command: str):
     """
     if command == "--help":
         run_help()
+        exit(0)
     try:
         target_archive = sys.argv[2]
     except IndexError:
         raise CustomError("Target archive not mentioned")
     if command == "-list_content":
         run_list_content(target_archive)
+        exit(0)
     try:
         target_folder = sys.argv[3]
     except IndexError:
         raise CustomError("Target location not mentioned")
     if command == "-create_archive":
         run_create_archive(target_archive, *sys.argv[3:])
+        exit(0)
     if command == "-full_unpack":
         run_full_unpack(target_archive, target_folder)
+        exit(0)
     try:
         target_files = sys.argv[4:]
     except IndexError:
         raise CustomError("Target files not mentioned")
     if command == "-unpack":
         run_unpack(target_archive, target_folder, *target_files)
+        exit(0)
     raise CustomError("Invalid first argument. Run `python a_seven.py --help` for help")
 
 

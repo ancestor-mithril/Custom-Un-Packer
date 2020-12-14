@@ -17,9 +17,9 @@ python a_seven.py -unpack target_archive target_folder target_files
                 => unpacks each one of `target_files` from `target_archive` into `target_folder`
 """
 from typing import List
-
-from archive import get_archive_content
-from utils import color_print
+import os
+from archive import get_archive_content, get_input_files_for_archive, append_file_to_archive
+from utils import color_print, CustomError
 
 
 def run_help():
@@ -43,6 +43,26 @@ def run_create_archive(target_archive: str, *target_objects: str):
     :param target_objects: a list of paths to valid files or folders; should not be empty
     :return: void
     """
+    if os.path.exists(target_archive):
+        raise CustomError("An archive with the same name already exists. Please select a new name for the archive")
+    try:
+        fp = open(target_archive, "wb")
+    except OSError as e:
+        raise CustomError(f"Error at creating target archive {e}")
+    input_files = get_input_files_for_archive(*target_objects)
+    for i in range(len(input_files) - 1):
+        for j in range(i + 1, len(input_files)):
+            if input_files[i][1] == input_files[j][1]:
+                raise CustomError(
+                    f"Files with duplicate name found after filtering:\n{input_files[i][0]}\n{input_files[j][0]}")
+
+    archive_metadata = f"""<?METADATA><?NO_FILES>{len(input_files)}</?NO_FILES><FILES>{"".join([
+        f"<?FILE><?NAME>{j}</?NAME><?SIZE>{os.path.getsize(i)}</?SIZE></?FILE>" for i, j in input_files
+    ])}</?FILES></?METADATA>""".encode('utf-8')
+    with fp:
+        fp.write(archive_metadata)
+        for i, j in input_files:
+            append_file_to_archive(i, fp)
     pass
 
 
