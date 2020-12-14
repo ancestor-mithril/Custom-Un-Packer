@@ -106,9 +106,16 @@ def append_file_to_archive(file: str, fp: BinaryIO, chunk_size: int = 1024):
 def unpack_file(file: str, size: int, fp: BinaryIO, chunk_size: int = 1024):
     """
 
-    :param file:
-    :param size:
-    :param fp:
-    :param chunk_size:
+    :param file: the file to be created
+    :param size: the size of file in archive
+    :param fp: archive file pointer
+    :param chunk_size: the chunk size to be read
     :return: void
     """
+    os.makedirs(os.path.dirname(file), exist_ok=True)
+    with open(file, "wb") as fp2:
+        while size > chunk_size:
+            fp2.write(fp.read(chunk_size))
+            size -= chunk_size
+        if size > 0:
+            fp2.write(fp.read(size))
