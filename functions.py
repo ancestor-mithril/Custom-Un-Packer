@@ -117,14 +117,14 @@ def run_unpack(target_archive: str, target_folder: str, *target_files: str):
     """
     prepare_archive_unpacking(target_archive, target_folder)
     metadata_length, files = get_archive_content(target_archive)
-    possible_files = [x for x, y in files]
+    possible_files = [x.replace("\\", "/") for x, y in files]
     for i in target_files:
         if i not in possible_files:
             raise CustomError(f"{i} is not in:{', '.join(possible_files)}]")
     with open(target_archive, "rb") as fp:
         fp.read(metadata_length)
         for file, size in files:
-            if file in target_files:
+            if file.replace("\\", "/") in target_files:
                 unpack_file(file=target_folder + "/" + file, size=int(size), fp=fp)
             else:
                 empty_read_archive(size=int(size), fp=fp)

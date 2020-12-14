@@ -1,6 +1,11 @@
 # Custom-Un-Packer
 UAIC_FII_PYTHON_PROJECT
 
+![Build](https://github.com/ancestor-mithril/Custom-Un-Packer/workflows/Build/badge.svg)
+![Testing](https://github.com/ancestor-mithril/Custom-Un-Packer/workflows/Testing/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 ## Nume: Stoica George (3A5)
 
 ## Proiect ales: A7
@@ -21,3 +26,14 @@ Comenzile listare_continut, full_unpack, unpack
 OUTPUT:
 Arhiva si fisierele rezultate in urma comenzilor rulate
 Logurile comenzilor executate precum si erorile aparute
+
+
+## Rulare:
+
+Mediul de lucru: `Python ^3.7`
+
+```
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python a_seven.py --help
+```
