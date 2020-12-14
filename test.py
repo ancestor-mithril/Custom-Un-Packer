@@ -61,9 +61,9 @@ class CustomUnPackerTester(unittest.TestCase):
         except Exception as e:
             no_error = False
             error_print(e)
+        shutil.rmtree("./test")
         self.assertTrue(no_error, "Runtime error")
         self.assertTrue(ok, "Folders are not equal")
-        shutil.rmtree("./test")
 
     def test_create_archive_from_files(self):
         """
@@ -88,9 +88,9 @@ class CustomUnPackerTester(unittest.TestCase):
         except Exception as e:
             error_print(e)
             no_error = False
+        shutil.rmtree("./test")
         self.assertTrue(no_error, "Runtime error")
         self.assertTrue(ok, "Content of files are not equal")
-        shutil.rmtree("./test")
 
     def test_list_content(self):
         """
@@ -110,9 +110,9 @@ class CustomUnPackerTester(unittest.TestCase):
         except Exception as e:
             error_print(e)
             no_error = False
+        shutil.rmtree("./test")
         self.assertTrue(no_error, "Runtime error")
         self.assertEqual(correct_answer, list_archive_content, "Listed content is not the same")
-        shutil.rmtree("./test")
 
     def test_unpack(self):
         """
@@ -132,6 +132,6 @@ class CustomUnPackerTester(unittest.TestCase):
         except Exception as e:
             error_print(e)
             no_error = False
+        shutil.rmtree("./test")
         self.assertTrue(no_error, "Runtime error")
         self.assertEqual(target_files, unpacked_files, "Unpacked files are not the expected ones")
-        shutil.rmtree("./test")

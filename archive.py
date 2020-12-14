@@ -113,6 +113,7 @@ def unpack_file(file: str, size: int, fp: BinaryIO, chunk_size: int = 1024):
     :return: void
     """
     os.makedirs(os.path.dirname(file), exist_ok=True)
+    print(file, size)
     with open(file, "wb") as fp2:
         while size > chunk_size:
             fp2.write(fp.read(chunk_size))

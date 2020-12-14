@@ -100,7 +100,7 @@ def run_full_unpack(target_archive: str, target_folder: str):
     with open(target_archive, "rb") as fp:
         fp.read(metadata_length)
         for file, size in files:
-            unpack_file(file=target_folder + file, size=int(size), fp=fp)
+            unpack_file(file=target_folder + "/" + file, size=int(size), fp=fp)
     pass
 
 
