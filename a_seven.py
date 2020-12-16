@@ -60,12 +60,11 @@ def run(command: str):
 
 if __name__ == "__main__":
     # sys.argv[1:] = ["--help"]
-    # sys.argv[1:] = ["-list_content", "./test2.archive"]
-    # sys.argv[1:] = ["-list_content", "./test.archive"]
     # sys.argv[1:] = ["-create_archive", "./test.archive", "./utils"]
+    # sys.argv[1:] = ["-list_content", "./test.archive"]
     # sys.argv[1:] = ["-create_archive", "./test2.archive", "./LICENSE", "./test.archive"]
     # sys.argv[1:] = ["-full_unpack", "./test2.archive", "./test_unpack_2"]
-    # sys.argv[1:] = ["-unpack", "./test2.archive", "./test_unpack_3", "test.archive"]
+    # sys.argv[1:] = ["-unpack", "./test.archive", "./test_unpack_4", "/custom_error.py", "/open_2.py"]
     if len(sys.argv) < 2:
         error_print("Invalid syntax. Run `python a_seven.py --help` for help")
     try:

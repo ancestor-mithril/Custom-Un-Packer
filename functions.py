@@ -32,7 +32,6 @@ def run_help():
     :return: void
     """
     color_print(__doc__)
-    exit(0)
 
 
 def run_create_archive(target_archive: str, *target_objects: str):
@@ -50,7 +49,7 @@ def run_create_archive(target_archive: str, *target_objects: str):
     try:
         fp = open(target_archive, "wb")
     except OSError as e:
-        raise CustomError(f"Error at creating target archive {e}")
+        raise CustomError(f"Error at creating target archive: {e}")
     try:
         input_files = get_input_files_for_archive(*target_objects)
     except Exception:
@@ -83,7 +82,7 @@ def run_list_content(target_archive: str):
     :param target_archive: the path to an already created archive
     :return: void
     """
-    print("\n".join(f"{i}: size: {j}" for i, j in get_archive_content(target_archive)[1]))
+    print("\n".join(f"{i}: \t size: {j} bytes" for i, j in get_archive_content(target_archive)[1]))
     pass
 
 
